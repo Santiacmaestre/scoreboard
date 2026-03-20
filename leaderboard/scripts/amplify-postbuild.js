@@ -11,10 +11,20 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT = process.cwd();
-const STANDALONE = path.join(ROOT, ".next", "standalone", "leaderboard");
 const HOSTING = path.join(ROOT, ".amplify-hosting");
 const COMPUTE = path.join(HOSTING, "compute", "default");
 const STATIC = path.join(HOSTING, "static");
+
+// Discover the standalone output directory.
+// When appRoot is set, Next.js outputs directly to .next/standalone/.
+// In monorepos without appRoot it may nest under a subfolder.
+const standaloneRoot = path.join(ROOT, ".next", "standalone");
+const candidateNested = path.join(standaloneRoot, "leaderboard");
+const STANDALONE = fs.existsSync(path.join(candidateNested, "server.js"))
+  ? candidateNested
+  : standaloneRoot;
+
+console.log(`Standalone directory: ${STANDALONE}`);
 
 function copyDir(src, dest) {
   fs.mkdirSync(dest, { recursive: true });
@@ -82,7 +92,7 @@ const manifest = {
     {
       name: "default",
       entrypoint: "server.js",
-      runtime: "nodejs18.x",
+      runtime: "nodejs22.x",
     },
   ],
   framework: {
