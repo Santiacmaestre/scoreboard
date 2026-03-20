@@ -79,6 +79,15 @@ if (fs.existsSync(nextStaticSrc)) {
   copyDir(nextStaticSrc, staticNextDest);
 }
 
+// ─── Copy required-server-files.json to hosting root ───
+// Amplify's validator looks for this file at the root of the build output
+// directory, not inside .next/.
+const requiredSrc = path.join(NEXT_DIR, "required-server-files.json");
+if (fs.existsSync(requiredSrc)) {
+  fs.copyFileSync(requiredSrc, path.join(HOSTING, "required-server-files.json"));
+  console.log("✓ Copied required-server-files.json to hosting root");
+}
+
 // ─── deploy-manifest.json ───
 const manifest = {
   version: 1,
