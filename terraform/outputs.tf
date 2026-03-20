@@ -38,6 +38,11 @@ output "amplify_custom_domain" {
   value       = var.domain_name
 }
 
+output "route53_zone_name" {
+  description = "Route 53 Zone domain"
+  value       = var.zone_name
+}
+
 output "route53_zone_id" {
   description = "Route 53 Zone ID"
   value       = aws_route53_zone.main.zone_id

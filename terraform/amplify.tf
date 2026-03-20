@@ -64,11 +64,11 @@ resource "aws_amplify_branch" "main" {
 
 resource "aws_amplify_domain_association" "main" {
   app_id      = aws_amplify_app.leaderboard.id
-  domain_name = var.domain_name
+  domain_name = var.zone_name
 
   sub_domain {
     branch_name = aws_amplify_branch.main.branch_name
-    prefix      = ""
+    prefix      = "leaderboard"
   }
 
   wait_for_verification = false

@@ -16,8 +16,14 @@ variable "project_name" {
   default     = "leaderboard"
 }
 
+variable "zone_name" {
+  description = "Root domain for the Route53 hosted zone (e.g., aiawsug.com)"
+  type        = string
+  default     = "aiawsug.com"
+}
+
 variable "domain_name" {
-  description = "Custom domain for the app (e.g., leaderboard.aiawsug.com)"
+  description = "Full domain for the app (e.g., leaderboard.aiawsug.com)"
   type        = string
   default     = "leaderboard.aiawsug.com"
 }
