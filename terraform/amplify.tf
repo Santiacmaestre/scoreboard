@@ -18,10 +18,6 @@ resource "aws_amplify_app" "leaderboard" {
             build:
               commands:
                 - npm run build
-          artifacts:
-            baseDirectory: .next
-            files:
-              - '**/*'
           cache:
             paths:
               - node_modules/**/*
