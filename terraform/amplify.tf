@@ -38,8 +38,7 @@ resource "aws_amplify_app" "leaderboard" {
     COGNITO_CLIENT_ID     = aws_cognito_user_pool_client.app.id
     COGNITO_CLIENT_SECRET = aws_cognito_user_pool_client.app.client_secret
     COGNITO_ISSUER        = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.main.id}"
-    NEXTAUTH_URL          = "https://${var.domain_name}"
-    NEXTAUTH_SECRET       = "placeholder-update-after-apply"
+    NEXTAUTH_SECRET       = random_password.nextauth_secret.result
     _CUSTOM_IMAGE         = "amplify:al2023"
   }
 
@@ -59,6 +58,7 @@ resource "aws_amplify_branch" "main" {
 
   environment_variables = {
     NEXT_PUBLIC_ENVIRONMENT = var.environment
+    NEXTAUTH_URL            = "https://${aws_amplify_app.leaderboard.default_domain}"
   }
 }
 

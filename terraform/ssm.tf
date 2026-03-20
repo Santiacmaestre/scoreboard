@@ -8,10 +8,15 @@ resource "aws_ssm_parameter" "cognito_client_secret" {
   }
 }
 
+resource "random_password" "nextauth_secret" {
+  length  = 32
+  special = true
+}
+
 resource "aws_ssm_parameter" "nextauth_secret" {
   name  = "/${var.project_name}/${var.environment}/nextauth-secret"
   type  = "SecureString"
-  value = "REPLACE_ME_WITH_RANDOM_SECRET"
+  value = random_password.nextauth_secret.result
 
   tags = {
     Name = "${var.project_name}-nextauth-secret"
