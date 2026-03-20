@@ -17,10 +17,9 @@ resource "aws_amplify_app" "leaderboard" {
                 - npm ci
             build:
               commands:
-                - npm run build
-                - node scripts/amplify-postbuild.js
+                - npx next build --webpack
           artifacts:
-            baseDirectory: .amplify-hosting
+            baseDirectory: .next
             files:
               - '**/*'
           cache:
@@ -54,7 +53,7 @@ resource "aws_amplify_branch" "main" {
   app_id      = aws_amplify_app.leaderboard.id
   branch_name = var.github_branch
 
-  framework = "Web"
+  framework = "Next.js - SSR"
   stage     = "PRODUCTION"
 
   environment_variables = {

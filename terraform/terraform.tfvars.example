@@ -1,6 +1,0 @@
-# Only secrets need to be provided — all other variables have defaults in variables.tf
-# In GitHub Actions these are injected via repository secrets.
-
-github_access_token  = "ghp_xxxxxxxxxxxx"
-google_client_id     = "xxxxx.apps.googleusercontent.com"
-google_client_secret = "GOCSPX-xxxxx"
