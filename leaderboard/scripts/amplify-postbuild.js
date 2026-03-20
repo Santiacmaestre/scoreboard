@@ -31,7 +31,16 @@ function copyDir(src, dest) {
   for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
     const srcPath = path.join(src, entry.name);
     const destPath = path.join(dest, entry.name);
-    if (entry.isDirectory()) {
+    if (entry.isSymbolicLink()) {
+      // Turbopack creates symlinks in .next/node_modules/ — resolve and copy
+      const realPath = fs.realpathSync(srcPath);
+      const stat = fs.statSync(realPath);
+      if (stat.isDirectory()) {
+        copyDir(realPath, destPath);
+      } else {
+        fs.copyFileSync(realPath, destPath);
+      }
+    } else if (entry.isDirectory()) {
       copyDir(srcPath, destPath);
     } else {
       fs.copyFileSync(srcPath, destPath);
@@ -113,6 +122,10 @@ const manifest = {
       runtime: "nodejs22.x",
     },
   ],
+  framework: {
+    name: "next",
+    version: "16.2.0",
+  },
 };
 
 fs.writeFileSync(

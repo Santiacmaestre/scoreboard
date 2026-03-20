@@ -54,7 +54,7 @@ resource "aws_amplify_branch" "main" {
   app_id      = aws_amplify_app.leaderboard.id
   branch_name = var.github_branch
 
-  framework = "Next.js - SSR"
+  framework = "Web"
   stage     = "PRODUCTION"
 
   environment_variables = {
