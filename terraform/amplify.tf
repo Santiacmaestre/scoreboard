@@ -30,16 +30,17 @@ resource "aws_amplify_app" "leaderboard" {
   EOT
 
   environment_variables = {
-    NEXT_PUBLIC_USE_MOCK  = "false"
-    NEXT_PUBLIC_APP_URL   = "https://${var.domain_name}"
-    APP_AWS_REGION        = var.aws_region
-    DYNAMODB_TABLE_NAME   = aws_dynamodb_table.leaderboard.name
-    COGNITO_USER_POOL_ID  = aws_cognito_user_pool.main.id
-    COGNITO_CLIENT_ID     = aws_cognito_user_pool_client.app.id
-    COGNITO_CLIENT_SECRET = aws_cognito_user_pool_client.app.client_secret
-    COGNITO_ISSUER        = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.main.id}"
-    NEXTAUTH_SECRET       = random_password.nextauth_secret.result
-    _CUSTOM_IMAGE         = "amplify:al2023"
+    AMPLIFY_MONOREPO_APP_ROOT = "leaderboard"
+    NEXT_PUBLIC_USE_MOCK      = "false"
+    NEXT_PUBLIC_APP_URL       = "https://${var.domain_name}"
+    APP_AWS_REGION            = var.aws_region
+    DYNAMODB_TABLE_NAME       = aws_dynamodb_table.leaderboard.name
+    COGNITO_USER_POOL_ID      = aws_cognito_user_pool.main.id
+    COGNITO_CLIENT_ID         = aws_cognito_user_pool_client.app.id
+    COGNITO_CLIENT_SECRET     = aws_cognito_user_pool_client.app.client_secret
+    COGNITO_ISSUER            = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.main.id}"
+    NEXTAUTH_SECRET           = random_password.nextauth_secret.result
+    _CUSTOM_IMAGE             = "amplify:al2023"
   }
 
   platform = "WEB_COMPUTE"
