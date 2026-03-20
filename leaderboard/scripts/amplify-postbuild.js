@@ -113,10 +113,6 @@ const manifest = {
       runtime: "nodejs22.x",
     },
   ],
-  framework: {
-    name: "next",
-    version: "16.2.0",
-  },
 };
 
 fs.writeFileSync(
