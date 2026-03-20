@@ -31,7 +31,7 @@ resource "aws_amplify_app" "leaderboard" {
   environment_variables = {
     NEXT_PUBLIC_USE_MOCK  = "false"
     NEXT_PUBLIC_APP_URL   = "https://${var.domain_name}"
-    AWS_REGION            = var.aws_region
+    APP_AWS_REGION        = var.aws_region
     DYNAMODB_TABLE_NAME   = aws_dynamodb_table.leaderboard.name
     COGNITO_USER_POOL_ID  = aws_cognito_user_pool.main.id
     COGNITO_CLIENT_ID     = aws_cognito_user_pool_client.app.id

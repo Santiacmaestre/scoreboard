@@ -18,7 +18,7 @@ import {
 import { getInitials, getRandomAvatarColor } from "./utils";
 
 const client = new DynamoDBClient({
-  region: process.env.AWS_REGION || "us-east-1",
+  region: process.env.APP_AWS_REGION || process.env.AWS_REGION || "us-east-1",
 });
 const docClient = DynamoDBDocumentClient.from(client);
 const TABLE = process.env.DYNAMODB_TABLE_NAME || "Leaderboard";

@@ -41,7 +41,7 @@ Aplicación web para rastrear y mostrar rankings de contribuidores y líderes de
 
 ## Paso 1 — Crear el backend de Terraform State
 
-Antes del primer deploy, crea manualmente el bucket S3 y la tabla DynamoDB para almacenar el state de Terraform:
+Antes del primer deploy, crea manualmente el bucket S3 para almacenar el state de Terraform (el locking usa el mecanismo nativo de S3 con `use_lockfile`):
 
 ```bash
 # Crear bucket S3 para el state
@@ -57,14 +57,6 @@ aws s3api put-bucket-versioning \
 aws s3api put-bucket-encryption \
   --bucket leaderboard-tfstate-aiawsug \
   --server-side-encryption-configuration '{"Rules":[{"ApplyServerSideEncryptionByDefault":{"SSEAlgorithm":"AES256"}}]}'
-
-# Crear tabla DynamoDB para state locking
-aws dynamodb create-table \
-  --table-name terraform-locks \
-  --attribute-definitions AttributeName=LockID,AttributeType=S \
-  --key-schema AttributeName=LockID,KeyType=HASH \
-  --billing-mode PAY_PER_REQUEST \
-  --region us-west-2
 ```
 
 ---

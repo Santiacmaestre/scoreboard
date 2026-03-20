@@ -9,11 +9,11 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "leaderboard-tfstate-aiawsug"
-    key            = "terraform.tfstate"
-    region         = "us-west-2"
-    dynamodb_table = "terraform-locks"
-    encrypt        = true
+    bucket       = "aiawsug-dev-tfstate"
+    key          = "leaderboard/terraform.tfstate"
+    region       = "us-west-2"
+    use_lockfile = true
+    encrypt      = true
   }
 }
 
