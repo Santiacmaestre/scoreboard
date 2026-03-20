@@ -70,6 +70,67 @@ if (fs.existsSync(nextStaticSrc)) {
   copyDir(nextStaticSrc, staticNextDest);
 }
 
+// Ensure required-server-files.json exists (Amplify deployment expects it).
+// Next.js 16 standalone may not generate this file, so create a minimal one.
+const requiredServerFilesSrc = path.join(ROOT, ".next", "required-server-files.json");
+const requiredServerFilesDest = path.join(COMPUTE, ".next", "required-server-files.json");
+if (fs.existsSync(requiredServerFilesSrc)) {
+  fs.mkdirSync(path.dirname(requiredServerFilesDest), { recursive: true });
+  fs.copyFileSync(requiredServerFilesSrc, requiredServerFilesDest);
+  console.log("✓ Copied required-server-files.json");
+} else {
+  // Generate a minimal required-server-files.json so Amplify doesn't fail
+  const minimal = {
+    version: 1,
+    config: {
+      env: {},
+      webpack: null,
+      eslint: { ignoreDuringBuilds: false },
+      typescript: { ignoreBuildErrors: false },
+      distDir: ".next",
+      cleanDistDir: true,
+      assetPrefix: "",
+      cacheMaxMemorySize: 52428800,
+      configOrigin: "next.config.ts",
+      useFileSystemPublicRoutes: true,
+      generateEtags: true,
+      pageExtensions: ["tsx", "ts", "jsx", "js"],
+      poweredByHeader: true,
+      compress: true,
+      images: { deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840], imageSizes: [16, 32, 48, 64, 96, 128, 256, 384], path: "/_next/image", loader: "default", domains: [], formats: ["image/webp"], minimumCacheTTL: 60 },
+      devIndicators: {},
+      onDemandEntries: { maxInactiveAge: 60000, pagesBufferLength: 5 },
+      amp: { canonicalBase: "" },
+      basePath: "",
+      sassOptions: {},
+      trailingSlash: false,
+      i18n: null,
+      productionBrowserSourceMaps: false,
+      reactStrictMode: true,
+      httpAgentOptions: { keepAlive: true },
+      output: "standalone",
+      modularizeImports: {},
+      experimental: {},
+    },
+    appDir: ROOT,
+    files: [],
+    ignore: [],
+  };
+  fs.mkdirSync(path.dirname(requiredServerFilesDest), { recursive: true });
+  fs.writeFileSync(requiredServerFilesDest, JSON.stringify(minimal, null, 2));
+  console.log("✓ Generated required-server-files.json (Next.js 16 compat)");
+}
+
+// Copy to multiple locations where Amplify might look
+const extraLocations = [
+  path.join(HOSTING, ".next", "required-server-files.json"),
+  path.join(HOSTING, "required-server-files.json"),
+];
+for (const loc of extraLocations) {
+  fs.mkdirSync(path.dirname(loc), { recursive: true });
+  fs.copyFileSync(requiredServerFilesDest, loc);
+}
+
 // Write deploy-manifest.json
 const manifest = {
   version: 1,
