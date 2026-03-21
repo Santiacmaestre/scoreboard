@@ -5,6 +5,7 @@ resource "aws_amplify_app" "leaderboard" {
   access_token = var.github_access_token
 
   iam_service_role_arn = aws_iam_role.amplify_ssr.arn
+  compute_role_arn     = aws_iam_role.amplify_ssr.arn
 
   build_spec = <<-EOT
     version: 1
