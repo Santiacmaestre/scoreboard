@@ -8,7 +8,10 @@ resource "aws_iam_role" "amplify_ssr" {
         Action = "sts:AssumeRole"
         Effect = "Allow"
         Principal = {
-          Service = "amplify.amazonaws.com"
+          Service = [
+            "amplify.amazonaws.com",
+            "lambda.amazonaws.com",
+          ]
         }
       }
     ]
