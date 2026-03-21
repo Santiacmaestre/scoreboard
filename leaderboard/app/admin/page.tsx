@@ -37,7 +37,32 @@ export default function AdminDashboard() {
         totalTypes: MOCK_CONTRIBUTION_TYPES.length,
         totalPoints: allContribs.reduce((s, c) => s + c.points, 0),
       });
+      return;
     }
+
+    Promise.all([
+      fetch("/api/leaderboard?type=contributors").then((r) => r.json()),
+      fetch("/api/leaderboard?type=leaders").then((r) => r.json()),
+      fetch("/api/contributions").then((r) => r.json()),
+      fetch("/api/types").then((r) => r.json()),
+    ])
+      .then(([contribJson, leadersJson, contribsJson, typesJson]) => {
+        const allPersons = [
+          ...(contribJson.data || []),
+          ...(leadersJson.data || []),
+        ];
+        const allContribs = contribsJson.data || [];
+        setStats({
+          totalPersons: allPersons.length,
+          totalContributions: allContribs.length,
+          totalTypes: (typesJson.data || []).length,
+          totalPoints: allPersons.reduce(
+            (s: number, p: { totalPoints: number }) => s + p.totalPoints,
+            0
+          ),
+        });
+      })
+      .catch(console.error);
   }, []);
 
   const cards = [

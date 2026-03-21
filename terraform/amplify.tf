@@ -65,7 +65,7 @@ resource "aws_amplify_branch" "main" {
 
   environment_variables = {
     NEXT_PUBLIC_ENVIRONMENT = var.environment
-    NEXTAUTH_URL            = var.amplify_app_id != "" ? "https://${var.github_branch}.${var.amplify_app_id}.amplifyapp.com" : "https://${var.domain_name}"
+    NEXTAUTH_URL            = "https://${var.domain_name}"
   }
 }
 
