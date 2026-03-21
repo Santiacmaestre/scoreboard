@@ -80,15 +80,17 @@ resource "aws_cognito_user_pool_client" "app" {
   allowed_oauth_flows                  = ["code"]
   allowed_oauth_scopes                 = ["openid", "email", "profile"]
 
-  callback_urls = [
+  callback_urls = compact([
     "https://${var.domain_name}/api/auth/callback/cognito",
+    var.amplify_app_id != "" ? "https://${var.github_branch}.${var.amplify_app_id}.amplifyapp.com/api/auth/callback/cognito" : "",
     "http://localhost:3000/api/auth/callback/cognito",
-  ]
+  ])
 
-  logout_urls = [
+  logout_urls = compact([
     "https://${var.domain_name}",
+    var.amplify_app_id != "" ? "https://${var.github_branch}.${var.amplify_app_id}.amplifyapp.com" : "",
     "http://localhost:3000",
-  ]
+  ])
 
   supported_identity_providers = [
     "Google",

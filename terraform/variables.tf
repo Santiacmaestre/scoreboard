@@ -22,6 +22,12 @@ variable "zone_name" {
   default     = "aiawsug.com"
 }
 
+variable "route53_zone_id" {
+  description = "Existing Route53 hosted zone ID"
+  type        = string
+  default     = "Z09794672DEXUE1DS34ED"
+}
+
 variable "domain_name" {
   description = "Full domain for the app (e.g., leaderboard.aiawsug.com)"
   type        = string
@@ -44,6 +50,12 @@ variable "github_branch" {
   description = "Git branch to deploy"
   type        = string
   default     = "main"
+}
+
+variable "amplify_app_id" {
+  description = "Amplify app ID (set after first deploy to add Amplify domain to Cognito callbacks)"
+  type        = string
+  default     = ""
 }
 
 variable "google_client_id" {
