@@ -17,6 +17,7 @@ resource "aws_amplify_app" "leaderboard" {
                 - npm ci
             build:
               commands:
+                - env | grep -E '^(NEXTAUTH_|COGNITO_|DYNAMODB_|APP_AWS_)' > .env.production
                 - npx next build --webpack
           artifacts:
             baseDirectory: .next
