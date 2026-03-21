@@ -1,6 +1,15 @@
 import type { AuthOptions } from "next-auth";
 import CognitoProvider from "next-auth/providers/cognito";
 
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "aiawsugcolombia@gmail.com")
+  .split(",")
+  .map((e) => e.trim().toLowerCase());
+
+export function isAllowedAdmin(email: string | null | undefined): boolean {
+  if (!email) return false;
+  return ADMIN_EMAILS.includes(email.toLowerCase());
+}
+
 export const authOptions: AuthOptions = {
   providers: [
     CognitoProvider({
@@ -10,6 +19,9 @@ export const authOptions: AuthOptions = {
     }),
   ],
   callbacks: {
+    async signIn({ user }) {
+      return isAllowedAdmin(user.email);
+    },
     async session({ session, token }) {
       if (session.user) {
         session.user.email = token.email as string;
@@ -19,6 +31,8 @@ export const authOptions: AuthOptions = {
   },
   pages: {
     signIn: "/admin/login",
+    error: "/admin/login",
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
+

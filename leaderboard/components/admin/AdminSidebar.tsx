@@ -47,7 +47,10 @@ export default function AdminSidebar() {
 
       <div className="p-4 border-t border-gray-800">
         <button
-          onClick={() => signOut({ callbackUrl: "/" })}
+          onClick={async () => {
+            await signOut({ redirect: false });
+            window.location.href = "/api/auth/logout";
+          }}
           className="w-full text-left text-sm text-gray-400 hover:text-white transition-colors cursor-pointer"
         >
           Cerrar sesión

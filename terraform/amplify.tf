@@ -17,7 +17,7 @@ resource "aws_amplify_app" "leaderboard" {
                 - npm ci
             build:
               commands:
-                - env | grep -E '^(NEXTAUTH_|COGNITO_|DYNAMODB_|APP_AWS_)' > .env.production
+                - env | grep -E '^(NEXTAUTH_|COGNITO_|DYNAMODB_|APP_AWS_|ADMIN_EMAILS)' >> .env.production
                 - npx next build --webpack
           artifacts:
             baseDirectory: .next
@@ -40,6 +40,8 @@ resource "aws_amplify_app" "leaderboard" {
     COGNITO_CLIENT_SECRET     = aws_cognito_user_pool_client.app.client_secret
     COGNITO_ISSUER            = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.main.id}"
     NEXTAUTH_SECRET           = random_password.nextauth_secret.result
+    ADMIN_EMAILS              = join(",", var.admin_emails)
+    COGNITO_DOMAIN            = aws_cognito_user_pool_domain.main.domain
     _CUSTOM_IMAGE             = "amplify:al2023"
   }
 

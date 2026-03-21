@@ -1,8 +1,13 @@
 "use client";
 
 import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function LoginPage() {
+function LoginForm() {
+  const searchParams = useSearchParams();
+  const error = searchParams.get("error");
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white rounded-2xl shadow-lg p-8 max-w-sm w-full text-center">
@@ -10,13 +15,30 @@ export default function LoginPage() {
         <p className="text-sm text-gray-500 mb-6">
           Inicia sesión para acceder al panel de administración
         </p>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-3 mb-4">
+            {error === "AccessDenied"
+              ? "Tu cuenta no tiene permisos de administrador."
+              : "Error al iniciar sesión. Intenta de nuevo."}
+          </div>
+        )}
+
         <button
-          onClick={() => signIn("cognito", { callbackUrl: "/admin" })}
+          onClick={() => signIn("cognito", { callbackUrl: "/admin", redirect: true })}
           className="w-full px-4 py-3 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors cursor-pointer"
         >
           Iniciar sesión con Google
         </button>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }
