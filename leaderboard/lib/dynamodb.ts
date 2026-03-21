@@ -441,6 +441,50 @@ export async function deleteContribution(
   );
 }
 
+export async function deletePerson(userId: string): Promise<void> {
+  const profile = await getUserProfile(userId);
+  if (!profile) return;
+
+  // Delete all contributions for this user
+  const contribs = await docClient.send(
+    new QueryCommand({
+      TableName: TABLE,
+      KeyConditionExpression: "PK = :pk AND begins_with(SK, :sk)",
+      ExpressionAttributeValues: {
+        ":pk": `USER#${userId}`,
+        ":sk": "CONTRIB#",
+      },
+    })
+  );
+
+  for (const item of contribs.Items || []) {
+    await docClient.send(
+      new DeleteCommand({
+        TableName: TABLE,
+        Key: { PK: `USER#${userId}`, SK: item.SK },
+      })
+    );
+  }
+
+  // Delete profile
+  await docClient.send(
+    new DeleteCommand({
+      TableName: TABLE,
+      Key: { PK: `USER#${userId}`, SK: "PROFILE" },
+    })
+  );
+
+  // Delete leaderboard entry
+  const userGsiPK = gsiPK(profile.section);
+  const sk = `${userGsiPK}#${String(profile.totalPoints).padStart(8, "0")}#${userId}`;
+  await docClient.send(
+    new DeleteCommand({
+      TableName: TABLE,
+      Key: { PK: "LEADERBOARD", SK: sk },
+    })
+  );
+}
+
 // --------------- Contribution Types ---------------
 
 export async function getContributionTypes(

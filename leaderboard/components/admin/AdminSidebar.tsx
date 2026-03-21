@@ -7,6 +7,7 @@ import { signOut } from "next-auth/react";
 const NAV_ITEMS = [
   { href: "/admin", label: "Dashboard", icon: "📊" },
   { href: "/admin/contributions", label: "Contribuciones", icon: "📝" },
+  { href: "/admin/persons", label: "Personas", icon: "👥" },
   { href: "/admin/types", label: "Tipos", icon: "🏷️" },
 ];
 
@@ -47,10 +48,7 @@ export default function AdminSidebar() {
 
       <div className="p-4 border-t border-gray-800">
         <button
-          onClick={async () => {
-            await signOut({ redirect: false });
-            window.location.href = "/api/auth/logout";
-          }}
+          onClick={() => signOut({ callbackUrl: "/admin/login" })}
           className="w-full text-left text-sm text-gray-400 hover:text-white transition-colors cursor-pointer"
         >
           Cerrar sesión

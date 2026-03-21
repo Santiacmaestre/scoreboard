@@ -3,6 +3,7 @@ import {
   getUserProfile,
   getUserContributions,
   changePersonSection,
+  deletePerson,
 } from "@/lib/dynamodb";
 import { requireAuth } from "@/lib/auth-helpers";
 import { Section } from "@/lib/types";
@@ -62,6 +63,27 @@ export async function PATCH(
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("Error changing section:", err);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { error } = await requireAuth();
+  if (error) return error;
+
+  const { id } = await params;
+
+  try {
+    await deletePerson(id);
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error("Error deleting person:", err);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

@@ -64,6 +64,15 @@ if (fs.existsSync(nextStaticSrc)) {
   copyDir(nextStaticSrc, nextStaticDest);
 }
 
+// ─── Copy .env.production into compute (runtime env vars) ───
+const envProd = path.join(ROOT, ".env.production");
+if (fs.existsSync(envProd)) {
+  fs.copyFileSync(envProd, path.join(COMPUTE, ".env.production"));
+  console.log("✓ Copied .env.production to compute/default");
+} else {
+  console.warn("⚠ No .env.production found — runtime env vars may be missing");
+}
+
 // ─── Copy full .next into .amplify-hosting/.next ───
 // Amplify's Next.js SSR adapter validates server trace files, manifests, and
 // required-server-files.json at .amplify-hosting/.next/. Copy the entire
