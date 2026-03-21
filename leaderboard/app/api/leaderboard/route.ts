@@ -16,9 +16,13 @@ export async function GET(request: NextRequest) {
     const data = await getLeaderboard(type);
     return NextResponse.json({ data });
   } catch (error) {
-    console.error("Error fetching leaderboard:", error);
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error("Error fetching leaderboard:", errMsg, {
+      table: process.env.DYNAMODB_TABLE_NAME,
+      region: process.env.APP_AWS_REGION || process.env.AWS_REGION,
+    });
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: `Leaderboard error: ${errMsg}` },
       { status: 500 }
     );
   }

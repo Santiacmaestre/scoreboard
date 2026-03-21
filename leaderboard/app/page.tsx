@@ -24,6 +24,7 @@ export default function Home() {
   const [loadingDetail, setLoadingDetail] = useState(false);
   const [showMobileDetail, setShowMobileDetail] = useState(false);
   const [types, setTypes] = useState<ContributionTypeConfig[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (USE_MOCK) {
@@ -45,15 +46,22 @@ export default function Home() {
       return;
     }
 
+    setError(null);
     fetch(`/api/leaderboard?type=${activeTab}`)
-      .then((res) => res.json())
-      .then((json) => {
+      .then(async (res) => {
+        const json = await res.json();
+        if (!res.ok) {
+          throw new Error(json.error || `API error ${res.status}`);
+        }
         setUsers(json.data || []);
         setSelectedUserId(null);
         setUserDetail(null);
         setShowMobileDetail(false);
       })
-      .catch(console.error);
+      .catch((err) => {
+        console.error("Leaderboard fetch error:", err);
+        setError(err.message || "Error cargando datos");
+      });
   }, [activeTab]);
 
   const handleSelectUser = useCallback((userId: string) => {
@@ -99,6 +107,12 @@ export default function Home() {
         style={{ minHeight: "600px" }}
       >
         <LeaderboardTabs activeTab={activeTab} onTabChange={setActiveTab} />
+
+        {error && (
+          <div className="bg-red-50 border-b border-red-200 text-red-700 text-sm px-4 py-2">
+            Error: {error}
+          </div>
+        )}
 
         <div className="flex flex-1 min-h-0">
           <div
