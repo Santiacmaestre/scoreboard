@@ -15,6 +15,15 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Leaderboard",
   description: "Leaderboard de contribuidores y líderes",
+  icons: {
+    icon: "/logo.svg",
+    apple: "/logo.svg",
+  },
+  openGraph: {
+    title: "Leaderboard",
+    description: "Leaderboard de contribuidores y líderes",
+    images: [{ url: "/logo.svg" }],
+  },
 };
 
 export default function RootLayout({
