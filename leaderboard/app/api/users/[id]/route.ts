@@ -23,10 +23,15 @@ export async function GET(
 
     const contributions = await getUserContributions(id);
 
-    // Extract lastContributionAt from the most recent contribution's date
+    // Find the most recent contribution by its activity date (not createdAt)
     let lastContributionAt: string | null = null;
     if (contributions.length > 0) {
-      lastContributionAt = contributions[0].createdAt || contributions[0].date;
+      const sorted = [...contributions].sort((a, b) => {
+        const dateA = new Date(a.date).getTime();
+        const dateB = new Date(b.date).getTime();
+        return dateB - dateA;
+      });
+      lastContributionAt = sorted[0].date;
     }
 
     return NextResponse.json({ profile, contributions, lastContributionAt });

@@ -129,7 +129,7 @@ export default function PersonsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {persons
+              {[...persons]
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .map((person) => (
                   <tr key={person.userId} className="hover:bg-gray-50/50">

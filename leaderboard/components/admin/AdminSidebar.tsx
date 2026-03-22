@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 const NAV_ITEMS = [
   { href: "/admin", label: "Dashboard", icon: "📊" },
@@ -13,6 +13,7 @@ const NAV_ITEMS = [
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   return (
     <aside className="w-56 bg-gray-900 text-white min-h-screen flex flex-col">
@@ -47,6 +48,11 @@ export default function AdminSidebar() {
       </nav>
 
       <div className="p-4 border-t border-gray-800">
+        {session?.user?.email && (
+          <p className="text-xs text-gray-500 mb-2 truncate" title={session.user.email}>
+            {session.user.email}
+          </p>
+        )}
         <button
           onClick={() => signOut({ callbackUrl: "/admin/login" })}
           className="w-full text-left text-sm text-gray-400 hover:text-white transition-colors cursor-pointer"

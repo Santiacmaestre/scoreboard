@@ -116,28 +116,30 @@ export async function searchPersons(query: string): Promise<UserProfile[]> {
     new ScanCommand({
       TableName: TABLE,
       FilterExpression:
-        "begins_with(PK, :userPrefix) AND SK = :profile AND contains(#n, :query)",
-      ExpressionAttributeNames: { "#n": "name" },
+        "begins_with(PK, :userPrefix) AND SK = :profile",
       ExpressionAttributeValues: {
         ":userPrefix": "USER#",
         ":profile": "PROFILE",
-        ":query": query,
       },
     })
   );
 
-  return (result.Items || []).map((item) => ({
-    userId: item.userId,
-    name: item.name,
-    initials: item.initials,
-    email: item.email,
-    avatarColor: item.avatarColor,
-    section: item.section,
-    totalPoints: item.totalPoints || 0,
-    totalContributions: item.totalContributions || 0,
-    rank: 0,
-    createdAt: item.createdAt,
-  }));
+  const queryLower = query.toLowerCase();
+
+  return (result.Items || [])
+    .filter((item) => (item.name as string).toLowerCase().includes(queryLower))
+    .map((item) => ({
+      userId: item.userId,
+      name: item.name,
+      initials: item.initials,
+      email: item.email,
+      avatarColor: item.avatarColor,
+      section: item.section,
+      totalPoints: item.totalPoints || 0,
+      totalContributions: item.totalContributions || 0,
+      rank: 0,
+      createdAt: item.createdAt,
+    }));
 }
 
 async function createPerson(data: {

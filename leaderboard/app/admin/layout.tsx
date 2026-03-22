@@ -1,5 +1,5 @@
-import AdminSidebar from "@/components/admin/AdminSidebar";
 import SessionProvider from "@/components/admin/SessionProvider";
+import AdminShell from "@/components/admin/AdminShell";
 
 export const metadata = {
   title: "Admin — Leaderboard",
@@ -12,10 +12,7 @@ export default function AdminLayout({
 }) {
   return (
     <SessionProvider>
-      <div className="flex min-h-screen bg-gray-50">
-        <AdminSidebar />
-        <main className="flex-1 p-8">{children}</main>
-      </div>
+      <AdminShell>{children}</AdminShell>
     </SessionProvider>
   );
 }

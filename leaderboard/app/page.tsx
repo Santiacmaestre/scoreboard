@@ -90,8 +90,13 @@ export default function Home() {
     fetch(`/api/users/${encodeURIComponent(userId)}`)
       .then((res) => res.json())
       .then((json) => {
+        const leaderboardUser = users.find((u) => u.userId === userId);
+        const profile = {
+          ...json.profile,
+          rank: leaderboardUser?.rank ?? json.profile.rank,
+        };
         setUserDetail({
-          profile: json.profile,
+          profile,
           contributions: json.contributions,
           lastContributionAt: json.lastContributionAt ?? null,
         });
