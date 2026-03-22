@@ -24,7 +24,7 @@ function LoginForm() {
 
         {error && error !== "AccessDenied" && (
           <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 text-sm rounded-lg p-3 mb-4">
-            Ocurrió un error durante la autenticación. Intenta de nuevo.
+            Error de autenticación: <code className="font-mono text-xs">{error}</code>
           </div>
         )}
 
