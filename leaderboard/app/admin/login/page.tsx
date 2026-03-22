@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
@@ -7,6 +8,15 @@ import { Suspense } from "react";
 function LoginForm() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
+  const relogin = searchParams.get("relogin");
+  const triggered = useRef(false);
+
+  useEffect(() => {
+    if (relogin === "true" && !triggered.current) {
+      triggered.current = true;
+      signIn("cognito", { callbackUrl: "/admin", redirect: true });
+    }
+  }, [relogin]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

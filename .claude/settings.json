@@ -10,7 +10,9 @@
       "Bash(sips -g pixelWidth -g pixelHeight /Users/santiago_castellanos/Repositories/pocs/scoreboard/leaderboard/public/og-image.png)",
       "Bash(curl -sI https://leaderboard.aiawsug.com/og-image.png)",
       "Bash(qlmanage -t -s 1200 -o . logo.svg)",
-      "Bash(mv logo.svg.png og-image.png)"
+      "Bash(mv logo.svg.png og-image.png)",
+      "Bash(qlmanage -t -s 2400 -o . logo.svg)",
+      "Bash(sips -g pixelWidth -g pixelHeight logo.svg.png)"
     ]
   }
 }
