@@ -5,7 +5,7 @@ export async function GET() {
   const clientId = process.env.COGNITO_CLIENT_ID || "";
   const redirectUri = encodeURIComponent(`${process.env.NEXTAUTH_URL || ""}/admin/login`);
 
-  const cognitoLogoutUrl = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${redirectUri}&redirect_uri=${redirectUri}`;
+  const cognitoLogoutUrl = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${redirectUri}&redirect_uri=${redirectUri}&response_type=code`;
 
   return NextResponse.redirect(cognitoLogoutUrl);
 }
