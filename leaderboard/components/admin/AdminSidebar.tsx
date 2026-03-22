@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 const NAV_ITEMS = [
   { href: "/admin", label: "Dashboard", icon: "📊" },
@@ -54,8 +54,7 @@ export default function AdminSidebar() {
           </p>
         )}
         <button
-          onClick={async () => {
-            await signOut({ redirect: false });
+          onClick={() => {
             window.location.href = "/api/auth/logout";
           }}
           className="w-full text-left text-sm text-gray-400 hover:text-white transition-colors cursor-pointer"

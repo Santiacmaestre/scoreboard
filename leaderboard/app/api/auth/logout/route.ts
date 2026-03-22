@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 export async function GET() {
   const cognitoDomain = `https://${process.env.COGNITO_DOMAIN || "leaderboard-dev"}.auth.${process.env.APP_AWS_REGION || "us-west-2"}.amazoncognito.com`;
@@ -7,5 +8,15 @@ export async function GET() {
 
   const cognitoLogoutUrl = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${redirectUri}&redirect_uri=${redirectUri}&response_type=code`;
 
-  return NextResponse.redirect(cognitoLogoutUrl);
+  // Clear NextAuth session cookies server-side
+  const cookieStore = await cookies();
+  const nextAuthCookies = cookieStore.getAll().filter((c) =>
+    c.name.startsWith("next-auth") || c.name.startsWith("__Secure-next-auth")
+  );
+  const response = NextResponse.redirect(cognitoLogoutUrl);
+  for (const cookie of nextAuthCookies) {
+    response.cookies.delete(cookie.name);
+  }
+
+  return response;
 }
