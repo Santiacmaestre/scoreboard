@@ -8,15 +8,16 @@ import { Suspense } from "react";
 function LoginForm() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
-  const relogin = searchParams.get("relogin");
   const triggered = useRef(false);
 
   useEffect(() => {
-    if (relogin === "true" && !triggered.current) {
+    const pending = sessionStorage.getItem("relogin");
+    if (pending === "true" && !triggered.current) {
       triggered.current = true;
+      sessionStorage.removeItem("relogin");
       signIn("cognito", { callbackUrl: "/admin", redirect: true });
     }
-  }, [relogin]);
+  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -41,7 +42,8 @@ function LoginForm() {
         <button
           onClick={() => {
             if (error === "AccessDenied") {
-              window.location.href = "/api/auth/logout?relogin=true";
+              sessionStorage.setItem("relogin", "true");
+              window.location.href = "/api/auth/logout";
             } else {
               signIn("cognito", { callbackUrl: "/admin", redirect: true });
             }
