@@ -443,6 +443,126 @@ export async function deleteContribution(
   );
 }
 
+export async function updateContribution(
+  userId: string,
+  contribId: string,
+  data: { typeSlug?: string; title?: string; description?: string; points?: number; date?: string }
+): Promise<void> {
+  // Find the contribution
+  const result = await docClient.send(
+    new QueryCommand({
+      TableName: TABLE,
+      KeyConditionExpression: "PK = :pk AND begins_with(SK, :sk)",
+      FilterExpression: "contribId = :cid",
+      ExpressionAttributeValues: {
+        ":pk": `USER#${userId}`,
+        ":sk": "CONTRIB#",
+        ":cid": contribId,
+      },
+    })
+  );
+
+  if (!result.Items || result.Items.length === 0) return;
+  const item = result.Items[0];
+  const oldPoints = item.points as number;
+  const newPoints = data.points ?? oldPoints;
+  const pointsDiff = newPoints - oldPoints;
+
+  // Update contribution fields
+  const expressions: string[] = [];
+  const names: Record<string, string> = {};
+  const values: Record<string, unknown> = {};
+
+  if (data.typeSlug !== undefined) {
+    names["#typeSlug"] = "typeSlug";
+    values[":typeSlug"] = data.typeSlug;
+    expressions.push("#typeSlug = :typeSlug");
+  }
+  if (data.title !== undefined) {
+    names["#title"] = "title";
+    values[":title"] = data.title;
+    expressions.push("#title = :title");
+  }
+  if (data.description !== undefined) {
+    names["#description"] = "description";
+    values[":description"] = data.description || null;
+    expressions.push("#description = :description");
+  }
+  if (data.points !== undefined) {
+    names["#points"] = "points";
+    values[":points"] = data.points;
+    expressions.push("#points = :points");
+  }
+  if (data.date !== undefined) {
+    names["#date"] = "date";
+    values[":date"] = data.date;
+    expressions.push("#date = :date");
+  }
+
+  if (expressions.length === 0) return;
+
+  await docClient.send(
+    new UpdateCommand({
+      TableName: TABLE,
+      Key: { PK: `USER#${userId}`, SK: item.SK },
+      UpdateExpression: `SET ${expressions.join(", ")}`,
+      ExpressionAttributeNames: names,
+      ExpressionAttributeValues: values,
+    })
+  );
+
+  // Update leaderboard if points changed
+  if (pointsDiff !== 0) {
+    const profile = await getUserProfile(userId);
+    if (!profile) return;
+
+    const userGsiPK = gsiPK(profile.section);
+
+    // Delete old leaderboard entry
+    const oldSK = `${userGsiPK}#${String(profile.totalPoints).padStart(8, "0")}#${userId}`;
+    await docClient.send(
+      new DeleteCommand({
+        TableName: TABLE,
+        Key: { PK: "LEADERBOARD", SK: oldSK },
+      })
+    );
+
+    // Update user profile totals
+    await docClient.send(
+      new UpdateCommand({
+        TableName: TABLE,
+        Key: { PK: `USER#${userId}`, SK: "PROFILE" },
+        UpdateExpression: "SET totalPoints = totalPoints + :diff",
+        ExpressionAttributeValues: { ":diff": pointsDiff },
+      })
+    );
+
+    const newTotal = profile.totalPoints + pointsDiff;
+
+    // Create new leaderboard entry
+    await docClient.send(
+      new PutCommand({
+        TableName: TABLE,
+        Item: {
+          PK: "LEADERBOARD",
+          SK: `${userGsiPK}#${String(newTotal).padStart(8, "0")}#${userId}`,
+          GSI1PK: userGsiPK,
+          GSI1SK: newTotal,
+          userId,
+          name: profile.name,
+          initials: profile.initials,
+          email: profile.email,
+          avatarColor: profile.avatarColor,
+          section: profile.section,
+          totalPoints: newTotal,
+          totalContributions: profile.totalContributions,
+          createdAt: profile.createdAt,
+        },
+      })
+    );
+  }
+}
+
 export async function deletePerson(userId: string): Promise<void> {
   const profile = await getUserProfile(userId);
   if (!profile) return;

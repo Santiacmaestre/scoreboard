@@ -8,12 +8,14 @@ import {
   MOCK_CONTRIBUTION_TYPES,
 } from "@/lib/mock-data";
 import ContributionTable from "@/components/admin/ContributionTable";
+import EditContributionModal from "@/components/admin/EditContributionModal";
 
 const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK !== "false";
 
 export default function ContributionsPage() {
   const [contributions, setContributions] = useState<Contribution[]>([]);
   const [types, setTypes] = useState<ContributionTypeConfig[]>([]);
+  const [editing, setEditing] = useState<Contribution | null>(null);
 
   useEffect(() => {
     if (USE_MOCK) {
@@ -58,6 +60,13 @@ export default function ContributionsPage() {
     }
   }
 
+  function handleSaveEdit(updated: Contribution) {
+    setContributions((prev) =>
+      prev.map((c) => (c.id === updated.id ? updated : c))
+    );
+    setEditing(null);
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -75,8 +84,18 @@ export default function ContributionsPage() {
           contributions={contributions}
           types={types}
           onDelete={handleDelete}
+          onEdit={setEditing}
         />
       </div>
+
+      {editing && (
+        <EditContributionModal
+          contribution={editing}
+          types={types}
+          onSave={handleSaveEdit}
+          onClose={() => setEditing(null)}
+        />
+      )}
     </div>
   );
 }

@@ -54,7 +54,17 @@ export default function AdminSidebar() {
           </p>
         )}
         <button
-          onClick={() => signOut({ callbackUrl: "/admin/login" })}
+          onClick={async () => {
+            await signOut({ redirect: false });
+            const cognitoDomain = process.env.NEXT_PUBLIC_COGNITO_DOMAIN;
+            const clientId = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID;
+            const logoutUri = `${window.location.origin}/admin/login`;
+            if (cognitoDomain && clientId) {
+              window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
+            } else {
+              window.location.href = "/admin/login";
+            }
+          }}
           className="w-full text-left text-sm text-gray-400 hover:text-white transition-colors cursor-pointer"
         >
           Cerrar sesión

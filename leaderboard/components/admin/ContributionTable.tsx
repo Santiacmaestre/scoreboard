@@ -7,12 +7,14 @@ interface ContributionTableProps {
   contributions: Contribution[];
   types: ContributionTypeConfig[];
   onDelete?: (contribution: Contribution) => void;
+  onEdit?: (contribution: Contribution) => void;
 }
 
 export default function ContributionTable({
   contributions,
   types,
   onDelete,
+  onEdit,
 }: ContributionTableProps) {
   if (contributions.length === 0) {
     return (
@@ -76,14 +78,24 @@ export default function ContributionTable({
                   {formatRelativeTime(contrib.createdAt)}
                 </td>
                 <td className="py-3 px-4 text-right">
-                  {onDelete && (
-                    <button
-                      onClick={() => onDelete(contrib)}
-                      className="text-red-500 hover:text-red-700 text-xs font-medium transition-colors cursor-pointer"
-                    >
-                      Eliminar
-                    </button>
-                  )}
+                  <div className="flex items-center justify-end gap-3">
+                    {onEdit && (
+                      <button
+                        onClick={() => onEdit(contrib)}
+                        className="text-indigo-600 hover:text-indigo-800 text-xs font-medium transition-colors cursor-pointer"
+                      >
+                        Editar
+                      </button>
+                    )}
+                    {onDelete && (
+                      <button
+                        onClick={() => onDelete(contrib)}
+                        className="text-red-500 hover:text-red-700 text-xs font-medium transition-colors cursor-pointer"
+                      >
+                        Eliminar
+                      </button>
+                    )}
+                  </div>
                 </td>
               </tr>
             );
