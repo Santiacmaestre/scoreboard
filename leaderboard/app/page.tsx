@@ -103,7 +103,7 @@ export default function Home() {
       })
       .catch(console.error)
       .finally(() => setLoadingDetail(false));
-  }, []);
+  }, [users]);
 
   return (
     <main className="flex-1 flex items-center justify-center p-4 md:p-8">
