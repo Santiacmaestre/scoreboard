@@ -57,6 +57,7 @@ resource "aws_cognito_identity_provider" "google" {
     client_id        = var.google_client_id
     client_secret    = var.google_client_secret
     authorize_scopes = "openid email profile"
+    authorize_url    = "https://accounts.google.com/o/oauth2/v2/auth?prompt=select_account"
   }
 
   attribute_mapping = {

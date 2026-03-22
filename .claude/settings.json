@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:aws.amazon.com)",
+      "WebFetch(domain:dynobase.dev)",
+      "Bash(python3 -c \":*)",
+      "Bash(grep -r \"signIn\\\\|signOut\\\\|useSession\\\\|SessionProvider\" /Users/santiago_castellanos/Repositories/pocs/scoreboard/leaderboard/components --include=*.ts --include=*.tsx)"
+    ]
+  }
+}

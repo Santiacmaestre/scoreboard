@@ -18,7 +18,7 @@ export const authOptions: AuthOptions = {
       issuer: process.env.COGNITO_ISSUER!,
       authorization: {
         params: {
-          prompt: "select_account",
+          prompt: "login",
         },
       },
     }),
