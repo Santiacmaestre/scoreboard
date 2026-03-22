@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 const NAV_ITEMS = [
   { href: "/admin", label: "Dashboard", icon: "📊" },
@@ -14,6 +14,32 @@ const NAV_ITEMS = [
 export default function AdminSidebar() {
   const pathname = usePathname();
   const { data: session } = useSession();
+
+  const handleLogout = () => {
+    // 1. Clear ALL client-side storage
+    try {
+      // localStorage: remove auth-related keys
+      Object.keys(localStorage).forEach((key) => {
+        if (
+          key.startsWith("next-auth") ||
+          key.startsWith("cognito") ||
+          key.startsWith("amplify") ||
+          key.startsWith("CognitoIdentityServiceProvider")
+        ) {
+          localStorage.removeItem(key);
+        }
+      });
+      // sessionStorage: clear everything
+      sessionStorage.clear();
+    } catch {
+      // Ignore storage access errors in restrictive environments
+    }
+
+    // 2. Redirect to server-side logout endpoint.
+    //    This clears NextAuth cookies + redirects to Cognito /logout
+    //    (which clears the Cognito session), then redirects back to /admin/login.
+    window.location.href = "/api/auth/logout";
+  };
 
   return (
     <aside className="w-56 bg-gray-900 text-white min-h-screen flex flex-col">
@@ -54,10 +80,7 @@ export default function AdminSidebar() {
           </p>
         )}
         <button
-          onClick={async () => {
-            await signOut({ redirect: false });
-            window.location.href = "/api/auth/logout";
-          }}
+          onClick={handleLogout}
           className="w-full text-left text-sm text-gray-400 hover:text-white transition-colors cursor-pointer"
         >
           Cerrar sesión

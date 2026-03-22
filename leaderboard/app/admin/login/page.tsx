@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
@@ -8,16 +7,6 @@ import { Suspense } from "react";
 function LoginForm() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
-  const triggered = useRef(false);
-
-  useEffect(() => {
-    const pending = sessionStorage.getItem("relogin");
-    if (pending === "true" && !triggered.current) {
-      triggered.current = true;
-      sessionStorage.removeItem("relogin");
-      signIn("cognito", { callbackUrl: "/admin", redirect: true });
-    }
-  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -27,32 +16,17 @@ function LoginForm() {
           Inicia sesión para acceder al panel de administración
         </p>
 
-        {error === "AccessDenied" && (
-          <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-3 mb-4">
-            Tu cuenta no tiene permisos de administrador.
-          </div>
-        )}
-
-        {error && error !== "AccessDenied" && (
+        {error && (
           <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 text-sm rounded-lg p-3 mb-4">
-            Error de autenticación: <code className="font-mono text-xs">{error}</code>
+            Error de autenticación. Por favor, intenta de nuevo.
           </div>
         )}
 
         <button
-          onClick={() => {
-            if (error === "AccessDenied") {
-              sessionStorage.setItem("relogin", "true");
-              window.location.href = "/api/auth/logout";
-            } else {
-              signIn("cognito", { callbackUrl: "/admin", redirect: true });
-            }
-          }}
+          onClick={() => signIn("cognito", { callbackUrl: "/admin" })}
           className="w-full px-4 py-3 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors cursor-pointer"
         >
-          {error === "AccessDenied"
-            ? "Intentar con otra cuenta"
-            : "Iniciar sesión con Google"}
+          Acceder con Google
         </button>
       </div>
     </div>

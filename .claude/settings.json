@@ -12,7 +12,9 @@
       "Bash(qlmanage -t -s 1200 -o . logo.svg)",
       "Bash(mv logo.svg.png og-image.png)",
       "Bash(qlmanage -t -s 2400 -o . logo.svg)",
-      "Bash(sips -g pixelWidth -g pixelHeight logo.svg.png)"
+      "Bash(sips -g pixelWidth -g pixelHeight logo.svg.png)",
+      "Bash(find /Users/santiago_castellanos/Repositories/pocs/scoreboard/leaderboard/node_modules/next/dist/docs/01-app/03-api-reference -type f -name *.md)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     ADMIN_EMAILS: process.env.ADMIN_EMAILS,
+    COGNITO_DOMAIN: process.env.COGNITO_DOMAIN,
   },
 };
 

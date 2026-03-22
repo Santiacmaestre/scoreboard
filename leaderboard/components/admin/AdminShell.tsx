@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import AdminSidebar from "./AdminSidebar";
 
@@ -11,20 +10,16 @@ export default function AdminShell({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const router = useRouter();
-  const isLoginPage = pathname === "/admin/login";
   const { status } = useSession();
 
-  useEffect(() => {
-    if (!isLoginPage && status === "unauthenticated") {
-      router.replace("/admin/login");
-    }
-  }, [status, isLoginPage, router]);
-
-  if (isLoginPage) {
+  // Login and unauthorized pages render without the admin shell
+  if (pathname === "/admin/login" || pathname === "/admin/unauthorized") {
     return <>{children}</>;
   }
 
+  // Show loading spinner while session is being resolved.
+  // This prevents the race condition: we NEVER redirect or show errors
+  // until the auth state is fully resolved.
   if (status !== "authenticated") {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">

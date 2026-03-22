@@ -17,16 +17,35 @@ export const authOptions: AuthOptions = {
       clientSecret: process.env.COGNITO_CLIENT_SECRET!,
       issuer: process.env.COGNITO_ISSUER!,
       checks: ["nonce"],
+      authorization: {
+        params: {
+          // Forces Cognito to re-authenticate through the IdP (Google),
+          // which effectively shows the Google account selector each time
+          prompt: "login",
+        },
+      },
     }),
   ],
   callbacks: {
-    async signIn({ user }) {
-      return isAllowedAdmin(user.email);
+    // Allow ALL authenticated users through signIn —
+    // admin vs non-admin is handled by middleware, not here.
+    // This ensures non-admins get a valid session so we can show their email.
+    async signIn() {
+      return true;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.email = user.email;
+        token.isAdmin = isAllowedAdmin(user.email);
+      }
+      return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.email = token.email as string;
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (session as any).isAdmin = token.isAdmin as boolean;
       return session;
     },
   },
@@ -36,4 +55,3 @@ export const authOptions: AuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
-
