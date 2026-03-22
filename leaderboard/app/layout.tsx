@@ -13,12 +13,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXTAUTH_URL || "http://localhost:3000"),
   title: "Leaderboard",
   description: "Leaderboard de contribuidores y líderes",
   openGraph: {
     title: "Leaderboard",
     description: "Leaderboard de contribuidores y líderes",
-    images: [{ url: "/logo.svg" }],
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 1200,
+        type: "image/png",
+      },
+    ],
   },
 };
 

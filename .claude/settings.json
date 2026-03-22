@@ -6,7 +6,8 @@
       "Bash(python3 -c \":*)",
       "Bash(grep -r \"signIn\\\\|signOut\\\\|useSession\\\\|SessionProvider\" /Users/santiago_castellanos/Repositories/pocs/scoreboard/leaderboard/components --include=*.ts --include=*.tsx)",
       "Bash(find /Users/santiago_castellanos/Repositories/pocs/scoreboard/leaderboard -type f \\\\\\(-name *cognito* -o -name *aws* -o -name amplify* \\\\\\))",
-      "Bash(xargs ls:*)"
+      "Bash(xargs ls:*)",
+      "Bash(sips -g pixelWidth -g pixelHeight /Users/santiago_castellanos/Repositories/pocs/scoreboard/leaderboard/public/og-image.png)"
     ]
   }
 }
