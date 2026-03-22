@@ -4,7 +4,9 @@
       "WebFetch(domain:aws.amazon.com)",
       "WebFetch(domain:dynobase.dev)",
       "Bash(python3 -c \":*)",
-      "Bash(grep -r \"signIn\\\\|signOut\\\\|useSession\\\\|SessionProvider\" /Users/santiago_castellanos/Repositories/pocs/scoreboard/leaderboard/components --include=*.ts --include=*.tsx)"
+      "Bash(grep -r \"signIn\\\\|signOut\\\\|useSession\\\\|SessionProvider\" /Users/santiago_castellanos/Repositories/pocs/scoreboard/leaderboard/components --include=*.ts --include=*.tsx)",
+      "Bash(find /Users/santiago_castellanos/Repositories/pocs/scoreboard/leaderboard -type f \\\\\\(-name *cognito* -o -name *aws* -o -name amplify* \\\\\\))",
+      "Bash(xargs ls:*)"
     ]
   }
 }
