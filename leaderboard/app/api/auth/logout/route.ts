@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const relogin = searchParams.get("relogin") === "true";
+
   const cognitoDomain = `https://${process.env.COGNITO_DOMAIN || "leaderboard-dev"}.auth.${process.env.APP_AWS_REGION || "us-west-2"}.amazoncognito.com`;
   const clientId = process.env.COGNITO_CLIENT_ID || "";
-  const redirectUri = encodeURIComponent(`${process.env.NEXTAUTH_URL || ""}/admin/login`);
+  const redirectTarget = relogin ? "/api/auth/signin/cognito" : "/admin/login";
+  const redirectUri = encodeURIComponent(`${process.env.NEXTAUTH_URL || ""}${redirectTarget}`);
 
   const cognitoLogoutUrl = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${redirectUri}`;
 

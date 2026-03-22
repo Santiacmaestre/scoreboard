@@ -28,23 +28,20 @@ function LoginForm() {
           </div>
         )}
 
-        {error === "AccessDenied" ? (
-          <button
-            onClick={() => {
-              window.location.href = "/api/auth/logout";
-            }}
-            className="w-full px-4 py-3 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors cursor-pointer"
-          >
-            Intentar con otra cuenta
-          </button>
-        ) : (
-          <button
-            onClick={() => signIn("cognito", { callbackUrl: "/admin", redirect: true })}
-            className="w-full px-4 py-3 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors cursor-pointer"
-          >
-            Iniciar sesión con Google
-          </button>
-        )}
+        <button
+          onClick={() => {
+            if (error === "AccessDenied") {
+              window.location.href = "/api/auth/logout?relogin=true";
+            } else {
+              signIn("cognito", { callbackUrl: "/admin", redirect: true });
+            }
+          }}
+          className="w-full px-4 py-3 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors cursor-pointer"
+        >
+          {error === "AccessDenied"
+            ? "Intentar con otra cuenta"
+            : "Iniciar sesión con Google"}
+        </button>
       </div>
     </div>
   );

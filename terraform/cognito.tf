@@ -90,10 +90,12 @@ resource "aws_cognito_user_pool_client" "app" {
   logout_urls = compact([
     "https://${var.domain_name}",
     "https://${var.domain_name}/admin/login",
+    "https://${var.domain_name}/api/auth/signin/cognito",
     var.amplify_app_id != "" ? "https://${var.github_branch}.${var.amplify_app_id}.amplifyapp.com" : "",
     var.amplify_app_id != "" ? "https://${var.github_branch}.${var.amplify_app_id}.amplifyapp.com/admin/login" : "",
     "http://localhost:3000",
     "http://localhost:3000/admin/login",
+    "http://localhost:3000/api/auth/signin/cognito",
   ])
 
   supported_identity_providers = [
