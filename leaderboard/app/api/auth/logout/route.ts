@@ -11,21 +11,16 @@ export async function GET() {
   // Cognito logout URL — clears Cognito session and redirects back to our login page
   const cognitoLogoutUrl = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${redirectUri}`;
 
-  // Clear ALL auth-related cookies server-side
-  const cookieStore = await cookies();
   const response = NextResponse.redirect(cognitoLogoutUrl);
 
+  // Clear ALL cookies — use explicit path "/" so the browser actually removes them.
+  // Without matching the path, the browser ignores the Set-Cookie delete.
+  const cookieStore = await cookies();
   for (const cookie of cookieStore.getAll()) {
-    if (
-      cookie.name.startsWith("next-auth") ||
-      cookie.name.startsWith("__Secure-next-auth") ||
-      cookie.name.startsWith("__Host-next-auth") ||
-      cookie.name.includes("cognito") ||
-      cookie.name.includes("XSRF") ||
-      cookie.name.includes("csrf")
-    ) {
-      response.cookies.delete(cookie.name);
-    }
+    response.cookies.set(cookie.name, "", {
+      expires: new Date(0),
+      path: "/",
+    });
   }
 
   return response;

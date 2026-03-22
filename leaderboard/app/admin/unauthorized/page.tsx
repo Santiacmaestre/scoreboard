@@ -1,29 +1,24 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 export default function UnauthorizedPage() {
   const { data: session, status } = useSession();
   const email = session?.user?.email;
 
-  const handleTryAnotherAccount = () => {
-    // Clear client-side storage before server-side logout
+  const handleTryAnotherAccount = async () => {
+    // 1. Invalidate NextAuth session
+    await signOut({ redirect: false });
+
+    // 2. Clear all client-side storage
     try {
+      localStorage.clear();
       sessionStorage.clear();
-      Object.keys(localStorage).forEach((key) => {
-        if (
-          key.startsWith("next-auth") ||
-          key.startsWith("cognito") ||
-          key.startsWith("amplify") ||
-          key.startsWith("CognitoIdentityServiceProvider")
-        ) {
-          localStorage.removeItem(key);
-        }
-      });
     } catch {
       // Ignore storage access errors
     }
-    // Server-side logout clears cookies + Cognito session, then redirects to /admin/login
+
+    // 3. Server-side logout clears cookies + Cognito session, then redirects to /admin/login
     window.location.href = "/api/auth/logout";
   };
 

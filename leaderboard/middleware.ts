@@ -16,7 +16,14 @@ export default withAuth(
       return NextResponse.redirect(new URL("/admin/unauthorized", req.url));
     }
 
-    return NextResponse.next();
+    // Prevent browser from caching admin pages.
+    // Without this, after logout the browser can serve stale cached pages
+    // making it look like the user is still logged in.
+    const response = NextResponse.next();
+    response.headers.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+    response.headers.set("Pragma", "no-cache");
+    response.headers.set("Expires", "0");
+    return response;
   },
   {
     callbacks: {

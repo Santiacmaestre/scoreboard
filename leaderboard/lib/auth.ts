@@ -17,13 +17,9 @@ export const authOptions: AuthOptions = {
       clientSecret: process.env.COGNITO_CLIENT_SECRET!,
       issuer: process.env.COGNITO_ISSUER!,
       checks: ["nonce"],
-      authorization: {
-        params: {
-          // Forces Cognito to re-authenticate through the IdP (Google),
-          // which effectively shows the Google account selector each time
-          prompt: "login",
-        },
-      },
+      // prompt=select_account is already configured at the Google IdP level
+      // in Terraform (cognito.tf authorize_url). No need to set prompt here —
+      // doing so interferes with Cognito's nonce validation.
     }),
   ],
   callbacks: {
