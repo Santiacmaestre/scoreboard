@@ -38,9 +38,9 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
     >
-      <body className="min-h-dvh flex flex-col bg-cover bg-center bg-no-repeat" style={{ backgroundColor: "#fdfcf8", backgroundImage: "url('/Banner-Colorful.png')" }}>
+      <body className="flex flex-col" style={{ backgroundImage: "url('/Banner-Colorful.png')" }}>
         {children}
         <footer className="py-6 flex flex-col items-center gap-2">
           <a href="https://linktr.ee/AIAWSUGColombia" target="_blank" rel="noopener noreferrer">

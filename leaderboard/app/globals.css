@@ -5,6 +5,18 @@
   --font-mono: var(--font-geist-mono);
 }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
 body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
 }
