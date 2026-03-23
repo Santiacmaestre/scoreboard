@@ -40,7 +40,7 @@ export default function RootLayout({
       lang="es"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-cover bg-center bg-no-repeat bg-fixed" style={{ backgroundImage: "url('/Banner-Colorful.png')" }}>
+      <body className="min-h-full flex flex-col bg-cover bg-center bg-no-repeat" style={{ backgroundColor: "#f5f0e8", backgroundImage: "url('/Banner-Colorful.png')" }}>
         {children}
         <footer className="py-6 flex flex-col items-center gap-2">
           <img src="/logo-colorful.svg" alt="AI AWS UG Colombia" className="h-10 w-10 drop-shadow-md" />
