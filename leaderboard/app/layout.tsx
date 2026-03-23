@@ -43,7 +43,9 @@ export default function RootLayout({
       <body className="min-h-dvh flex flex-col bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/Banner-Colorful.png')" }}>
         {children}
         <footer className="py-6 flex flex-col items-center gap-2">
-          <img src="/logo-colorful.svg" alt="AI AWS UG Colombia" className="h-10 w-10 drop-shadow-md" />
+          <a href="https://linktr.ee/AIAWSUGColombia" target="_blank" rel="noopener noreferrer">
+            <img src="/logo-colorful.svg" alt="AI AWS UG Colombia" className="h-10 w-10 drop-shadow-md" />
+          </a>
           <p className="text-gray-500 text-sm font-medium tracking-wide text-center leading-relaxed">
             Made with <span className="text-red-400">&#9829;</span> by<br />
             AI AWS UG Colombia
