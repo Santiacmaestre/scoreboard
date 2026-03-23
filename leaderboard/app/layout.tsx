@@ -44,8 +44,9 @@ export default function RootLayout({
         {children}
         <footer className="py-6 flex flex-col items-center gap-2">
           <img src="/logo-colorful.svg" alt="AI AWS UG Colombia" className="h-10 w-10 drop-shadow-md" />
-          <p className="text-gray-500 text-sm font-medium tracking-wide">
-            Made with <span className="text-red-400">&#9829;</span> by AI AWS UG Colombia
+          <p className="text-gray-500 text-sm font-medium tracking-wide text-center leading-relaxed">
+            Made with <span className="text-red-400">&#9829;</span> by<br />
+            AI AWS UG Colombia
           </p>
         </footer>
       </body>
