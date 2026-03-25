@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXTAUTH_URL || "http://localhost:3000"),
   title: "Leaderboard",
   description: "Leaderboard de contribuidores y líderes",
+  icons: {
+    icon: "/logo-colorful.svg",
+  },
   openGraph: {
     title: "Leaderboard",
     description: "Leaderboard de contribuidores y líderes",

@@ -64,13 +64,7 @@ export function formatLastContribution(dateString: string | null): string {
   const diffDays = Math.floor(diffMs / 86400000);
 
   if (diffDays < 1) return "Hoy";
-  if (diffDays < 7) return `~${diffDays} ${diffDays === 1 ? "día" : "días"}`;
-  if (diffDays < 30) {
-    const weeks = Math.floor(diffDays / 7);
-    return `~${weeks} ${weeks === 1 ? "semana" : "semanas"}`;
-  }
-  const months = Math.floor(diffDays / 30);
-  if (diffDays < 365) return `~${months} ${months === 1 ? "mes" : "meses"}`;
+  if (diffDays < 365) return `~${diffDays} ${diffDays === 1 ? "día" : "días"}`;
   const years = Math.floor(diffDays / 365);
   return `~${years} ${years === 1 ? "año" : "años"}`;
 }

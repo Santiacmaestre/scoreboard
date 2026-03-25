@@ -35,9 +35,9 @@ function checkRateLimit(ip: string): { limited: boolean; remaining: number } {
 }
 
 // ---------------------------------------------------------------------------
-// Middleware
+// Proxy
 // ---------------------------------------------------------------------------
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // --- Rate limiting (all routes) ---
