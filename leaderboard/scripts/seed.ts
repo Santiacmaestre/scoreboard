@@ -6,9 +6,9 @@ const docClient = DynamoDBDocumentClient.from(client);
 const TABLE = process.env.DYNAMODB_TABLE_NAME || "Leaderboard";
 
 const AVATAR_COLORS = [
-  "#854F0B", "#115E59", "#5B21B6", "#9A3412",
-  "#1E40AF", "#BE185D", "#047857", "#7C3AED",
-  "#B91C1C", "#0369A1", "#4338CA", "#A16207",
+  "#6D28D9", "#0E7490", "#B45309", "#047857",
+  "#BE185D", "#1D4ED8", "#DC2626", "#7C3AED",
+  "#0F766E", "#C2410C",
 ];
 
 async function put(item: Record<string, unknown>) {

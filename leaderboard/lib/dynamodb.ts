@@ -226,6 +226,36 @@ export async function changePersonSection(
   );
 }
 
+export async function updatePersonColor(
+  userId: string,
+  avatarColor: string
+): Promise<void> {
+  const profile = await getUserProfile(userId);
+  if (!profile) throw new Error("User not found");
+
+  // Update profile
+  await docClient.send(
+    new UpdateCommand({
+      TableName: TABLE,
+      Key: { PK: `USER#${userId}`, SK: "PROFILE" },
+      UpdateExpression: "SET avatarColor = :c",
+      ExpressionAttributeValues: { ":c": avatarColor },
+    })
+  );
+
+  // Update leaderboard entry
+  const gsi = gsiPK(profile.section);
+  const sk = `${gsi}#${String(profile.totalPoints).padStart(8, "0")}#${userId}`;
+  await docClient.send(
+    new UpdateCommand({
+      TableName: TABLE,
+      Key: { PK: "LEADERBOARD", SK: sk },
+      UpdateExpression: "SET avatarColor = :c",
+      ExpressionAttributeValues: { ":c": avatarColor },
+    })
+  );
+}
+
 // --------------- Contributions ---------------
 
 export async function createContribution(

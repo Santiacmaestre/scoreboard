@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { UserProfile } from "@/lib/types";
+import { AVATAR_COLORS } from "@/lib/utils";
 import {
   MOCK_CONTRIBUTORS,
   MOCK_LEADERS,
@@ -12,6 +13,8 @@ const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK !== "false";
 export default function PersonsPage() {
   const [persons, setPersons] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
+  const [colorPickerFor, setColorPickerFor] = useState<string | null>(null);
+  const colorPickerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (USE_MOCK) {
@@ -94,6 +97,46 @@ export default function PersonsPage() {
     }
   }
 
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (colorPickerRef.current && !colorPickerRef.current.contains(e.target as Node)) {
+        setColorPickerFor(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  async function handleChangeColor(person: UserProfile, color: string) {
+    setColorPickerFor(null);
+
+    if (USE_MOCK) {
+      setPersons((prev) =>
+        prev.map((p) =>
+          p.userId === person.userId ? { ...p, avatarColor: color } : p
+        )
+      );
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/users/${person.userId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ avatarColor: color }),
+      });
+      if (res.ok) {
+        setPersons((prev) =>
+          prev.map((p) =>
+            p.userId === person.userId ? { ...p, avatarColor: color } : p
+          )
+        );
+      }
+    } catch (err) {
+      console.error("Error changing color:", err);
+    }
+  }
+
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Personas</h1>
@@ -135,12 +178,41 @@ export default function PersonsPage() {
                   <tr key={person.userId} className="hover:bg-gray-50/50">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
-                        <span
-                          className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold"
-                          style={{ backgroundColor: person.avatarColor }}
-                        >
-                          {person.initials}
-                        </span>
+                        <div className="relative">
+                          <button
+                            onClick={() =>
+                              setColorPickerFor(
+                                colorPickerFor === person.userId ? null : person.userId
+                              )
+                            }
+                            className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold cursor-pointer hover:ring-2 hover:ring-offset-1 hover:ring-gray-300 transition-all"
+                            style={{ backgroundColor: person.avatarColor }}
+                            title="Cambiar color"
+                          >
+                            {person.initials}
+                          </button>
+                          {colorPickerFor === person.userId && (
+                            <div
+                              ref={colorPickerRef}
+                              className="absolute top-9 left-0 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-2 grid grid-cols-5 gap-1.5"
+                              style={{ width: "160px" }}
+                            >
+                              {AVATAR_COLORS.map((color) => (
+                                <button
+                                  key={color}
+                                  onClick={() => handleChangeColor(person, color)}
+                                  className={`w-6 h-6 rounded-full cursor-pointer transition-all hover:scale-110 ${
+                                    person.avatarColor === color
+                                      ? "ring-2 ring-offset-1 ring-gray-900"
+                                      : ""
+                                  }`}
+                                  style={{ backgroundColor: color }}
+                                  title={color}
+                                />
+                              ))}
+                            </div>
+                          )}
+                        </div>
                         <span className="font-medium text-gray-900">
                           {person.name}
                         </span>

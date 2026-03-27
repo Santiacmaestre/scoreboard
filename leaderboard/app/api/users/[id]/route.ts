@@ -3,6 +3,7 @@ import {
   getUserProfile,
   getUserContributions,
   changePersonSection,
+  updatePersonColor,
   deletePerson,
 } from "@/lib/dynamodb";
 import { requireAuth } from "@/lib/auth-helpers";
@@ -55,6 +56,12 @@ export async function PATCH(
 
   try {
     const body = await request.json();
+
+    if (body.avatarColor) {
+      await updatePersonColor(id, body.avatarColor);
+      return NextResponse.json({ success: true });
+    }
+
     const newSection = body.section as Section;
 
     if (!newSection || !["contributors", "leaders"].includes(newSection)) {
@@ -67,7 +74,7 @@ export async function PATCH(
     await changePersonSection(id, newSection);
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error("Error changing section:", err);
+    console.error("Error updating user:", err);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

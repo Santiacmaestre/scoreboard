@@ -1,18 +1,16 @@
 import { ContributionTypeConfig } from "./types";
 
 export const AVATAR_COLORS = [
-  "#854F0B", // amber
-  "#115E59", // teal
-  "#5B21B6", // purple
-  "#9A3412", // coral
-  "#1E40AF", // blue
-  "#BE185D", // pink
-  "#047857", // emerald
-  "#7C3AED", // violet
-  "#B91C1C", // red
-  "#0369A1", // sky
-  "#4338CA", // indigo
-  "#A16207", // yellow
+  "#6D28D9", // violeta
+  "#0E7490", // cian
+  "#B45309", // ámbar
+  "#047857", // esmeralda
+  "#BE185D", // rosa
+  "#1D4ED8", // azul
+  "#DC2626", // rojo
+  "#7C3AED", // púrpura
+  "#0F766E", // teal
+  "#C2410C", // naranja
 ];
 
 export const FALLBACK_TYPE_COLORS = {
