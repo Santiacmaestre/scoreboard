@@ -6,6 +6,13 @@ export const AVATAR_COLORS = [
   "#5B21B6", // purple
   "#9A3412", // coral
   "#1E40AF", // blue
+  "#BE185D", // pink
+  "#047857", // emerald
+  "#7C3AED", // violet
+  "#B91C1C", // red
+  "#0369A1", // sky
+  "#4338CA", // indigo
+  "#A16207", // yellow
 ];
 
 export const FALLBACK_TYPE_COLORS = {
