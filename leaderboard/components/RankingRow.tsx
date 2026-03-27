@@ -45,7 +45,7 @@ export default function RankingRow({ user, isSelected, onClick }: RankingRowProp
       <Avatar initials={user.initials} color={user.avatarColor} size="sm" />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-gray-900 truncate">{user.name}</p>
-        <p className="text-xs text-gray-400">{user.totalContributions} contribuciones</p>
+        <p className="text-xs text-gray-400">{user.totalContributions} {user.totalContributions === 1 ? "contribución" : "contribuciones"}</p>
       </div>
       <span
         className={`text-sm font-bold tabular-nums ${

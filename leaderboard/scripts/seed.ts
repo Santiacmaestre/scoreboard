@@ -5,7 +5,11 @@ const client = new DynamoDBClient({ region: process.env.AWS_REGION || "us-east-1
 const docClient = DynamoDBDocumentClient.from(client);
 const TABLE = process.env.DYNAMODB_TABLE_NAME || "Leaderboard";
 
-const AVATAR_COLORS = ["#854F0B", "#115E59", "#5B21B6", "#9A3412", "#1E40AF"];
+const AVATAR_COLORS = [
+  "#854F0B", "#115E59", "#5B21B6", "#9A3412",
+  "#1E40AF", "#BE185D", "#047857", "#7C3AED",
+  "#B91C1C", "#0369A1", "#4338CA", "#A16207",
+];
 
 async function put(item: Record<string, unknown>) {
   await docClient.send(new PutCommand({ TableName: TABLE, Item: item }));
@@ -74,7 +78,7 @@ const users: SeedUser[] = [
     ],
   },
   {
-    userId: "101", name: "Camilo Ríos", initials: "CR", avatarColorIndex: 2,
+    userId: "101", name: "Camilo Ríos", initials: "CR", avatarColorIndex: 3,
     section: "leaders", totalPoints: 350, totalContributions: 2,
     contributions: [
       { typeSlug: "event-lead", title: "Lead conferencia anual", points: 200, date: "2025-03-10", createdAt: "2025-03-10T09:00:00Z" },

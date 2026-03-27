@@ -39,12 +39,12 @@ export const MOCK_CONTRIBUTORS: UserProfile[] = [
     rank: 5, createdAt: "2025-05-01T00:00:00Z",
   },
   {
-    userId: "006", name: "Carlos Henao", initials: "CH", avatarColor: AVATAR_COLORS[0],
+    userId: "006", name: "Carlos Henao", initials: "CH", avatarColor: AVATAR_COLORS[5],
     section: "contributors", totalPoints: 721, totalContributions: 1,
     rank: 6, createdAt: "2025-06-01T00:00:00Z",
   },
   {
-    userId: "007", name: "Diana Restrepo", initials: "DR", avatarColor: AVATAR_COLORS[1],
+    userId: "007", name: "Diana Restrepo", initials: "DR", avatarColor: AVATAR_COLORS[6],
     section: "contributors", totalPoints: 654, totalContributions: 2,
     rank: 7, createdAt: "2025-03-05T00:00:00Z",
   },
@@ -52,22 +52,22 @@ export const MOCK_CONTRIBUTORS: UserProfile[] = [
 
 export const MOCK_LEADERS: UserProfile[] = [
   {
-    userId: "101", name: "Camilo Ríos", initials: "CR", avatarColor: AVATAR_COLORS[2],
+    userId: "101", name: "Camilo Ríos", initials: "CR", avatarColor: AVATAR_COLORS[7],
     section: "leaders", totalPoints: 2340, totalContributions: 8,
     rank: 1, createdAt: "2025-01-10T00:00:00Z",
   },
   {
-    userId: "102", name: "Valentina Ospina", initials: "VO", avatarColor: AVATAR_COLORS[3],
+    userId: "102", name: "Valentina Ospina", initials: "VO", avatarColor: AVATAR_COLORS[8],
     section: "leaders", totalPoints: 2100, totalContributions: 6,
     rank: 2, createdAt: "2025-02-01T00:00:00Z",
   },
   {
-    userId: "103", name: "Felipe Arango", initials: "FA", avatarColor: AVATAR_COLORS[4],
+    userId: "103", name: "Felipe Arango", initials: "FA", avatarColor: AVATAR_COLORS[9],
     section: "leaders", totalPoints: 1870, totalContributions: 5,
     rank: 3, createdAt: "2025-03-01T00:00:00Z",
   },
   {
-    userId: "104", name: "Natalia Bermúdez", initials: "NB", avatarColor: AVATAR_COLORS[0],
+    userId: "104", name: "Natalia Bermúdez", initials: "NB", avatarColor: AVATAR_COLORS[10],
     section: "leaders", totalPoints: 1560, totalContributions: 4,
     rank: 4, createdAt: "2025-01-20T00:00:00Z",
   },
